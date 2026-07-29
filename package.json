@@ -1,0 +1,41 @@
+{
+  "name": "thafheem-api",
+  "version": "1.0.0",
+  "description": "Backend API for Thafheem Quran Web Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "echo \"No build step required for Node.js backend\"",
+    "migrate:sqlite": "node migrate/migrate_arabic_pageranges_to_sqlite.js",
+    "migrate:sqlite:prod": "node migrate/migrate_arabic_pageranges_to_sqlite.js --env prod",
+    "migrate:glossary": "node migrate/fetch_glossary.js"
+  },
+  "keywords": [
+    "quran",
+    "api",
+    "islamic",
+    "translation"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.8.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.2.1",
+    "firebase-admin": "^14.1.0",
+    "helmet": "^8.2.0",
+    "marked": "4.3.0",
+    "mysql2": "^3.23.1",
+    "nodemailer": "^7.0.13",
+    "redis": "^5.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "better-sqlite3": "^12.6.2",
+    "nodemon": "^3.1.0"
+  }
+}

@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Razorpay Verify Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 760px;
+      margin: 24px auto;
+      padding: 0 16px;
+      line-height: 1.4;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    input, button, textarea {
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 12px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .muted {
+      color: #666;
+      font-size: 14px;
+    }
+    .ok {
+      color: #0a7a2f;
+      font-weight: 600;
+    }
+    .error {
+      color: #b10000;
+      font-weight: 600;
+    }
+    code {
+      background: #f3f3f3;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Razorpay Payment Verify Helper</h2>
+  <p class="muted">
+    Local testing only. This page creates order from backend and opens Razorpay checkout.
+    After success, copy values and call <code>POST /api/payments/verify</code> in Postman.
+  </p>
+
+  <div class="card">
+    <label>Backend URL</label>
+    <input id="baseUrl" value="http://localhost:5000" />
+
+    <label>Amount (in paise)</label>
+    <input id="amount" type="number" value="50000" min="1" />
+
+    <label>Donor Name</label>
+    <input id="donorName" value="Postman Test User" />
+
+    <label>Donor Email</label>
+    <input id="donorEmail" value="test@example.com" />
+
+    <label>Donor Phone</label>
+    <input id="donorPhone" value="+919999999999" />
+
+    <label>Campaign ID</label>
+    <input id="campaignId" value="campaign-2026" />
+
+    <button id="payBtn">Create Order and Pay</button>
+    <div id="status" class="muted">Waiting...</div>
+  </div>
+
+  <div class="card">
+    <h3>Copy this into Postman verify body</h3>
+    <textarea id="resultJson" rows="10" readonly>{
+  "orderId": "",
+  "paymentId": "",
+  "signature": ""
+}</textarea>
+    <button id="copyBtn">Copy JSON</button>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    function setStatus(message, isError = false) {
+      const status = $("status");
+      status.textContent = message;
+      status.className = isError ? "error" : "ok";
+    }
+
+    function updateResult(orderId, paymentId, signature) {
+      $("resultJson").value = JSON.stringify(
+        { orderId, paymentId, signature },
+        null,
+        2
+      );
+    }
+
+    async function createOrder(baseUrl, payload) {
+      const response = await fetch(baseUrl + "/api/payments/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || "Create order failed");
+      }
+      return data;
+    }
+
+    $("payBtn").addEventListener("click", async () => {
+      try {
+        setStatus("Creating order...");
+
+        const baseUrl = $("baseUrl").value.trim().replace(/\/+$/, "");
+        const amount = Number($("amount").value);
+
+        const orderData = await createOrder(baseUrl, {
+          amount,
+          currency: "INR",
+          donorName: $("donorName").value.trim(),
+          donorEmail: $("donorEmail").value.trim(),
+          donorPhone: $("donorPhone").value.trim(),
+          campaignId: $("campaignId").value.trim()
+        });
+
+        setStatus("Order created. Opening Razorpay checkout...");
+
+        const options = {
+          key: orderData.keyId,
+          amount: orderData.amount,
+          currency: orderData.currency,
+          name: "Donation Test",
+          description: "Razorpay verify test",
+          order_id: orderData.orderId,
+          handler: function (resp) {
+            const orderId = resp.razorpay_order_id;
+            const paymentId = resp.razorpay_payment_id;
+            const signature = resp.razorpay_signature;
+
+            updateResult(orderId, paymentId, signature);
+            setStatus("Payment success. Values ready for Postman verify.");
+            console.log("Razorpay callback values:", resp);
+          },
+          modal: {
+            ondismiss: function () {
+              setStatus("Checkout closed before completion.", true);
+            }
+          },
+          theme: {
+            color: "#3399cc"
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (resp) {
+          setStatus("Payment failed. Check console for details.", true);
+          console.error("Payment failed:", resp.error);
+        });
+        rzp.open();
+      } catch (error) {
+        setStatus(error.message || "Unexpected error", true);
+      }
+    });
+
+    $("copyBtn").addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText($("resultJson").value);
+        setStatus("Copied verify JSON to clipboard.");
+      } catch (error) {
+        setStatus("Copy failed. Please copy manually.", true);
+      }
+    });
+  </script>
+</body>
+</html>
