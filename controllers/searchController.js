@@ -62,7 +62,7 @@ exports.searchArabicPhrase = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchArabicPhrase:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -176,7 +176,7 @@ exports.searchText = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchText:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -227,7 +227,7 @@ exports.searchQuranSubjects = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchQuranSubjects:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -318,7 +318,7 @@ exports.getQuranSubjectResults = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getQuranSubjectResults:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -372,7 +372,7 @@ exports.searchTafseerSubjects = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchTafseerSubjects:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -423,7 +423,7 @@ exports.getTafseerSubjectResults = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getTafseerSubjectResults:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -492,7 +492,7 @@ exports.searchWordMeaning = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchWordMeaning:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -509,22 +509,32 @@ exports.searchRoots = async (req, res) => {
     const page   = parsePage(req.query.page);
     const limit  = parseLimit(req.query.limit);
     const offset = (page - 1) * limit;
-    const like   = `%${q}%`;
+    // Strip harakat/quranic marks/tatweel and unify alef variants so a
+    // voweled query (e.g. كَتَبَ) still matches the plain `root` column.
+    // Arabic chars go through bound params — inlined literals get mangled
+    // by the connection charset.
+    const normalizedQ = q
+      .replace(/[ً-ٰٟۖ-ۭـ]/g, '')
+      .replace(/[آأإٱ]/g, 'ا')
+      .trim() || q;
+    const like = `%${normalizedQ}%`;
+    const normRoot = "REPLACE(REPLACE(REPLACE(REPLACE(root, ?, ?), ?, ?), ?, ?), ?, ?)";
+    const repParams = ['آ', 'ا', 'أ', 'ا', 'إ', 'ا', 'ٱ', 'ا'];
 
     const [[{ total }]] = await mysqlPool.query(
-      'SELECT COUNT(DISTINCT root_id) AS total FROM t_words_with_caya WHERE root LIKE ?',
-      [like]
+      `SELECT COUNT(DISTINCT root_id) AS total FROM t_words_with_caya WHERE ${normRoot} LIKE ?`,
+      [...repParams, like]
     );
 
     const [rows] = await mysqlPool.query(
       `SELECT root_id AS rootGroupId, root,
               COUNT(DISTINCT caya) AS verseCount
        FROM t_words_with_caya
-       WHERE root LIKE ?
+       WHERE ${normRoot} LIKE ?
        GROUP BY root_id, root
        ORDER BY root_id
        LIMIT ? OFFSET ?`,
-      [like, limit, offset]
+      [...repParams, like, limit, offset]
     );
 
     res.json({
@@ -541,7 +551,7 @@ exports.searchRoots = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ searchRoots:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -584,7 +594,7 @@ exports.getRootSeeds = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getRootSeeds:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -622,7 +632,7 @@ exports.getRootWordForms = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getRootWordForms:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -678,7 +688,7 @@ exports.getRootWordVerses = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getRootWordVerses:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -753,7 +763,7 @@ exports.getRootWordBundle = async (req, res) => {
     });
   } catch (err) {
     console.error('❌ getRootWordBundle:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -771,6 +781,6 @@ exports.getGlossaryEntries = async (req, res) => {
     res.json(rows);
   } catch (err) {
     console.error('❌ getGlossaryEntries:', err.message);
-    res.status(500).json({ error: 'Database error', message: err.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };

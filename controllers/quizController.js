@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const mysqlPool = require('../config/database');
 
@@ -62,7 +62,7 @@ exports.getSurahQuizPaginated = async (req, res) => {
     });
   } catch (err) {
     console.error('getSurahQuizPaginated error:', err.message);
-    res.status(500).json({ error: 'Failed to load quiz questions', message: err.message });
+    res.status(500).json({ error: 'Failed to load quiz questions', message: 'Something went wrong' });
   }
 };
 
@@ -96,7 +96,7 @@ exports.getTafheemQuizPaginated = async (req, res) => {
     });
   } catch (err) {
     console.error('getTafheemQuizPaginated error:', err.message);
-    res.status(500).json({ error: 'Failed to load Tafheem quiz', message: err.message });
+    res.status(500).json({ error: 'Failed to load Tafheem quiz', message: 'Something went wrong' });
   }
 };
 
@@ -124,7 +124,7 @@ exports.getBlockQuiz = async (req, res) => {
     res.json({ surahId, from, to, questions: rows.map(normalizeRow) });
   } catch (err) {
     console.error('getBlockQuiz error:', err.message);
-    res.status(500).json({ error: 'Failed to load block quiz', message: err.message });
+    res.status(500).json({ error: 'Failed to load block quiz', message: 'Something went wrong' });
   }
 };
 

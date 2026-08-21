@@ -1,6 +1,10 @@
 const express = require('express');
 const router  = express.Router();
 const search  = require('../controllers/searchController');
+const { searchLimiter } = require('../middlewares/security');
+
+// Search hits LIKE '%..%' scans — limit it before anything else.
+router.use(searchLimiter);
 
 // ── Arabic phrase search ────────────────────────────────────────────────────
 // GET /api/search/arabic-phrase?q=<arabic>&page=1&limit=10

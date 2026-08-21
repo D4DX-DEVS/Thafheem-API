@@ -14,7 +14,11 @@ const mysqlPool = require('./config/database');
 const redisClient = require('./config/redis');
 const gracefulShutdown = require('./utils/gracefulShutdown');
 
+const { readLimiter } = require('./middlewares/security');
+
 const app = express();
+// Behind Nginx/Netlify/Render — needed so rate limits key on the real client IP.
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
 
 console.log('🚀 Starting Thafheem API Server...');
@@ -69,8 +73,8 @@ app.use(cors({
 }));
 
 app.use(compression());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '100kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
 // Request logging (only in development)
 if (process.env.NODE_ENV === 'development') {
@@ -183,9 +187,9 @@ app.get('/doc', documentationController.getDocumentation);
 app.get('/doc/quick', documentationController.getQuickReference);
 
 // API Routes - Unified routes with language parameter
-app.use('/api', apiRoutes);
+app.use('/api', readLimiter, apiRoutes);
 // Versioned routes (v1) for frontend compatibility
-app.use('/api/v1', apiRoutes);
+app.use('/api/v1', readLimiter, apiRoutes);
 
 // 404 handler
 app.use((req, res) => {
