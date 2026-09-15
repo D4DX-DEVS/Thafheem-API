@@ -1,16 +1,21 @@
+const isDev = () => process.env.NODE_ENV === 'development';
+
 // Global error handling middleware
 const errorHandler = (err, req, res, next) => {
   console.error('❌ Error:', err.stack);
-  
-  // Default error status and message
+
   const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal Server Error';
-  
+
+  // 5xx messages carry SQL/driver internals — log them, don't ship them.
+  const message =
+    statusCode >= 500 && !isDev()
+      ? 'Internal Server Error'
+      : err.message || 'Internal Server Error';
+
   res.status(statusCode).json({
     error: message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(isDev() && { stack: err.stack })
   });
 };
 
 module.exports = errorHandler;
-

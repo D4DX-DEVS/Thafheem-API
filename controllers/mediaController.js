@@ -37,7 +37,7 @@ exports.getMediaByNoteNo = async (req, res) => {
     console.error(`❌ Error fetching media by NoteNo (${req.params.noteNo}):`, error.message);
     res.status(500).json({ 
       error: 'Database error', 
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };

@@ -36,7 +36,7 @@ exports.getNoteById = async (req, res) => {
     console.error(`❌ Error fetching note by ID (${req.params.noteId}):`, error.message);
     res.status(500).json({ 
       error: 'Database error', 
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };

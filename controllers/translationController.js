@@ -153,7 +153,7 @@ exports.getTranslation = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -194,7 +194,7 @@ exports.getHindiSurahIntro = async (req, res) => {
     console.error('❌ Error fetching Hindi surah intro:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -240,7 +240,7 @@ exports.getUrduSurahIntro = async (req, res) => {
     console.error('❌ Error fetching Urdu surah intro:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -282,7 +282,7 @@ exports.getUrduSurahIntroAudio = async (req, res) => {
     console.error('❌ Error fetching Urdu surah intro audio:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -328,7 +328,7 @@ exports.getBanglaSurahIntro = async (req, res) => {
     console.error('❌ Error fetching Bangla surah intro:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -374,7 +374,7 @@ exports.getTamilSurahIntro = async (req, res) => {
     console.error('❌ Error fetching Tamil surah intro:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -474,7 +474,7 @@ exports.getAppendix = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching appendix:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -570,7 +570,7 @@ exports.getHindiFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Hindi Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -732,7 +732,7 @@ exports.getUrduFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Urdu Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -821,7 +821,7 @@ exports.getUrduJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Urdu Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -910,7 +910,7 @@ exports.getMalayalamJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -999,7 +999,7 @@ exports.getHindiJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Hindi Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1088,7 +1088,7 @@ exports.getEnglishJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching English Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1177,7 +1177,7 @@ exports.getBanglaJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Bangla Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1266,7 +1266,7 @@ exports.getTamilJesusMohammed = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Tamil Jesus and Mohammed:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1355,7 +1355,7 @@ exports.getMalayalamFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1505,7 +1505,7 @@ exports.getEnglishFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching English Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1601,7 +1601,7 @@ exports.getBanglaFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Bangla Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1690,7 +1690,7 @@ exports.getMalayalamIntroductionToQuran = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam Introduction to Quran:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1779,7 +1779,7 @@ exports.getHindiIntroductionToQuran = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Hindi Introduction to Quran:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1868,7 +1868,7 @@ exports.getEnglishIntroductionToQuran = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching English Introduction to Quran:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -1975,7 +1975,7 @@ exports.getBanglaIntroductionToQuran = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Bangla Introduction to Quran:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2162,7 +2162,7 @@ exports.getTamilFinalityOfProphethood = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Tamil Finality of Prophethood:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2250,7 +2250,7 @@ exports.getArticleById = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching article:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2348,7 +2348,7 @@ exports.getMalayalamTechnicalTerms = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam Technical Terms:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2396,7 +2396,7 @@ exports.getTechnicalTermsByLanguage = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Technical Terms:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2486,7 +2486,7 @@ exports.getMalayalamTranslators = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam Translators:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2588,7 +2588,7 @@ exports.getMalayalamHistoryOfTranslation = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam History of Translation:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2739,7 +2739,7 @@ exports.getSurahTranslations = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching surah translations:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -2822,7 +2822,7 @@ exports.getArabicSurahVerses = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3049,7 +3049,7 @@ exports.getBlockwiseTranslation = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching blockwise translation:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3122,7 +3122,7 @@ exports.getInterpretation = async (req, res) => {
     res.json({ language: lang, surah: surahNum, ayah: ayahNum, count: rows.length, explanations: rows });
   } catch (error) {
     console.error(`❌ Error fetching interpretation:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3151,10 +3151,81 @@ exports.getWordByWord = async (req, res) => {
       return true;
     });
 
-    res.json({ language: lang, surah: parseInt(surah), ayah: parseInt(ayah), count: uniqueWords.length, words: uniqueWords });
+    // ── Server-side alignment ────────────────────────────────────────────────
+    // Align qwm WordPhrase entries (standard script, possibly multi-word) to the
+    // displayed Uthmani ayah tokens so the frontend can render positionally
+    // instead of fuzzy-matching. Additive fields: { aligned, segments } —
+    // existing consumers of { words } are untouched. If alignment fails the
+    // verse returns aligned:false and the frontend falls back to fuzzy matching.
+    let aligned = false;
+    let segments = [];
+    try {
+      const [[ayaRow]] = await mysqlPool.query(
+        'SELECT AyaHText FROM quranayas WHERE suraid = ? AND ayaid = ? LIMIT 1',
+        [parseInt(surah), parseInt(ayah)]
+      );
+      const ayaText = ayaRow?.AyaHText || '';
+      if (ayaText) {
+        // Tokenize exactly like the frontend: drop verse markers/numbers and
+        // standalone Quranic pause-mark tokens
+        const tokens = ayaText
+          .replace(/[﴾﴿٠-٩۰-۹()]+/g, ' ')
+          .trim()
+          .split(/\s+/)
+          .filter(t => t && !/^[ۖ-ۭ]+$/.test(t));
+
+        // Normalize for cross-script comparison: strip marks, unify alef/ya,
+        // then drop alefs and hamza (Uthmani dagger alef vs plain full alef)
+        const norm = (t) => (t || '')
+          .replace(/[ۖ-ۭـ]/g, '')
+          .replace(/[ً-ٰٟ]/g, '')
+          .replace(/[آأإٱٲٳ]/g, 'ا')
+          .replace(/ى/g, 'ي')
+          .replace(/[اء]/g, '')
+          .trim();
+
+        const cleanPhrase = (p) => (p || '')
+          .replace(/[﴾﴿٠-٩۰-۹()]+/g, ' ')
+          .trim();
+
+        const meaningful = uniqueWords.filter(w => cleanPhrase(w.WordPhrase).length > 0);
+
+        // Greedy: each phrase consumes display tokens until its normalized
+        // length is covered (handles يا أيها ↔ يَٰٓأَيُّهَا style splits)
+        let pos = 0;
+        let ok = meaningful.length > 0 && tokens.length > 0;
+        const segs = [];
+        for (const w of meaningful) {
+          if (!ok) break;
+          const target = norm(cleanPhrase(w.WordPhrase)).replace(/\s+/g, '');
+          let acc = '';
+          const segTokens = [];
+          while (pos < tokens.length && acc.length < Math.max(1, target.length - 1)) {
+            acc += norm(tokens[pos]);
+            segTokens.push(tokens[pos]);
+            pos += 1;
+          }
+          // Per-segment sanity: normalized lengths must be close
+          if (!segTokens.length || Math.abs(acc.length - target.length) > 2) {
+            ok = false;
+            break;
+          }
+          segs.push({ displayText: segTokens.join(' '), ...w });
+        }
+        if (ok && pos === tokens.length) {
+          aligned = true;
+          segments = segs;
+        }
+      }
+    } catch (alignError) {
+      // Alignment is best-effort — never fail the endpoint over it
+      console.warn('word-by-word alignment failed:', alignError.message);
+    }
+
+    res.json({ language: lang, surah: parseInt(surah), ayah: parseInt(ayah), count: uniqueWords.length, words: uniqueWords, aligned, segments });
   } catch (error) {
     console.error(`❌ Error fetching word-by-word:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3211,7 +3282,7 @@ exports.getAyaRanges = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3235,7 +3306,7 @@ exports.getArabicText = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching Arabic text:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3253,7 +3324,7 @@ exports.getUrduFootnote = async (req, res) => {
     res.json({ footnote_id: parseInt(footnoteId), footnote_text: rows[0].footnote_text || '' });
   } catch (error) {
     console.error(`❌ Error fetching Urdu footnote:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3270,7 +3341,7 @@ exports.getEnglishFootnote = async (req, res) => {
     res.json({ footnote_id: parseInt(footnoteId), footnote_text: rows[0].footnote_text || '' });
   } catch (error) {
     console.error(`❌ Error fetching English footnote:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3306,7 +3377,7 @@ exports.getEnglishFinalityFootnote = async (req, res) => {
     console.error(`❌ Error fetching English finality of prophethood footnote:`, error.message);
     res.status(500).json({ 
       error: 'Database error', 
-      message: error.message 
+      message: 'Something went wrong' 
     });
   }
 };
@@ -3347,7 +3418,7 @@ exports.getUrduFinalityFootnote = async (req, res) => {
     console.error(`❌ Attempted query: SELECT id, footnote FROM thafheem_thafnewdb.urdu_parisamapthi_footnotes WHERE id = ${footnoteId}`);
     res.status(500).json({ 
       error: 'Database error', 
-      message: error.message 
+      message: 'Something went wrong' 
     });
   }
 };
@@ -3382,7 +3453,7 @@ exports.checkEnglishFootnotesCount = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error checking eng_footnotes:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3407,7 +3478,7 @@ exports.getEnglishInterpretationById = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching English interpretation by ID:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3468,7 +3539,7 @@ exports.getAllEnglishInterpretations = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching all English interpretations:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3521,7 +3592,7 @@ exports.getEnglishInterpretationBySurahAndNo = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching English interpretation:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3574,7 +3645,7 @@ exports.getMalayalamInterpretationBySurahAndNo = async (req, res) => {
     });
   } catch (error) {
     console.error(`❌ Error fetching Malayalam interpretation:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3610,7 +3681,7 @@ exports.getMalayalamInterpretationsByAyah = async (req, res) => {
     });
   } catch (error) {
     console.error('❌ Error fetching Malayalam interpretations by ayah:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3628,7 +3699,7 @@ exports.getMalayalamFootnote = async (req, res) => {
     res.json({ footnote_id: parseInt(footnoteId), footnote_text: rows[0].footnote_text || '' });
   } catch (error) {
     console.error(`❌ Error fetching Malayalam footnote:`, error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3779,7 +3850,7 @@ exports.getMalayalamQuranAya = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3806,7 +3877,7 @@ exports.getChapterInfo = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3851,7 +3922,7 @@ exports.getMalayalamSurahIntro = async (req, res) => {
     console.error('❌ Error fetching Malayalam surah intro:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -3936,7 +4007,7 @@ exports.getPreface = async (req, res) => {
       });
     }
     
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -3953,7 +4024,7 @@ exports.checkLanguageHealth = async (req, res) => {
     await mysqlPool.query('SELECT 1 as test');
     res.json({ language: lang, status: 'ok', message: `${lang} database is connected and working` });
   } catch (error) {
-    res.status(500).json({ language, status: 'error', message: error.message });
+    res.status(500).json({ language, status: 'error', message: 'Something went wrong' });
   }
 };
 
@@ -4025,7 +4096,7 @@ exports.getTajweedRules = async (req, res) => {
     
     res.status(500).json({ 
       error: 'Database error', 
-      message: error.message,
+      message: 'Something went wrong',
       tableName: TAJWEED_TABLE,
       errorCode: error.code
     });
@@ -4113,7 +4184,7 @@ exports.getTajweedWords = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Error fetching tajweed words:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -4186,7 +4257,7 @@ exports.getTajweedLines = async (req, res) => {
 
   } catch (error) {
     console.error('❌ Error fetching tajweed lines:', error.message);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -4314,7 +4385,7 @@ exports.getUrduTranslationAudio = async (req, res) => {
   } catch (error) {
     console.error('❌ Error fetching Urdu translation audio:', error.message);
     console.error('❌ Full error:', error);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -4439,7 +4510,7 @@ exports.getUrduInterpretationAudio = async (req, res) => {
   } catch (error) {
     console.error('❌ Error fetching Urdu interpretation audio:', error.message);
     console.error('❌ Full error:', error);
-    res.status(500).json({ error: 'Database error', message: error.message });
+    res.status(500).json({ error: 'Database error', message: 'Something went wrong' });
   }
 };
 
@@ -4464,20 +4535,47 @@ exports.searchWords = async (req, res) => {
 
     // ── Arabic ─────────────────────────────────────────────────────────────
     if (lang === 'arabic') {
+      // Strip harakat/quranic marks/tatweel, unify alef variants and ya/alef-maqsura,
+      // then drop alefs entirely (Uthmani uses dagger alef where plain script has a
+      // full alef) so voweled and plain queries both match AyaNText. Same transform
+      // is applied to the column below.
+      const normalizeAr = (s) => s
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '')
+        .replace(/[\u0622\u0623\u0625\u0671]/g, '\u0627')
+        .replace(/\u0649/g, '\u064A')
+        .replace(/\u0627/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+      let normalizedArabic = normalizeAr(query);
+      // ponytail: all-alef query normalizes to nothing - fall back to raw query
+      if (!normalizedArabic) normalizedArabic = query.trim();
+      const arabicTerm = `%${normalizedArabic}%`;
+      // Arabic chars must go through bound params \u2014 inlined literals get
+      // mangled by the connection charset and the REPLACEs silently no-op
+      const normNText = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(AyaNText, ?, ?), ?, ?), ?, ?), ?, ?), ?, ?), ?, '')";
+      const repParams = [
+        '\u0622', '\u0627', // \u0622 \u2192 \u0627
+        '\u0623', '\u0627', // \u0623 \u2192 \u0627
+        '\u0625', '\u0627', // \u0625 \u2192 \u0627
+        '\u0671', '\u0627', // \u0671 \u2192 \u0627
+        '\u0649', '\u064A', // \u0649 \u2192 \u064A
+        '\u0627',           // \u0627 \u2192 '' (drop alefs)
+      ];
+
       const [[{ total }]] = await mysqlPool.query(
         `SELECT COUNT(DISTINCT CONCAT(suraid, '_', ayaid)) AS total
-         FROM quranayas WHERE AyaHText LIKE ? OR AyaNText LIKE ?`,
-        [searchTerm, searchTerm]
+         FROM quranayas WHERE AyaHText LIKE ? OR ${normNText} LIKE ?`,
+        [searchTerm, ...repParams, arabicTerm]
       );
 
       const [rows] = await mysqlPool.query(
         `SELECT DISTINCT suraid AS surah, ayaid AS ayah,
                 AyaHText AS arabicWord, AyaNText AS matchedText
          FROM quranayas
-         WHERE AyaHText LIKE ? OR AyaNText LIKE ?
+         WHERE AyaHText LIKE ? OR ${normNText} LIKE ?
          ORDER BY surah, ayah
          LIMIT ? OFFSET ?`,
-        [searchTerm, searchTerm, limit, offset]
+        [searchTerm, ...repParams, arabicTerm, limit, offset]
       );
 
       return res.json({
@@ -4669,7 +4767,7 @@ exports.searchWords = async (req, res) => {
     });
     res.status(500).json({
       error:    'Database error',
-      message:  error.message,
+      message: 'Something went wrong',
       language: lang,
       query:    req.query.q || req.query.query || req.params.query
     });
@@ -4714,7 +4812,7 @@ exports.getAllSurahNames = async (req, res) => {
     console.error('❌ Error fetching surah names from MySQL:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -4854,7 +4952,7 @@ exports.getSurahNamesByLanguage = async (req, res) => {
     console.error(`❌ Error fetching surah names for language ${req.params.language}:`, error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -4997,7 +5095,7 @@ exports.getSujudAyahsByLanguage = async (req, res) => {
     console.error(`❌ Error fetching sujud ayahs for language ${req.params.language}:`, error.message);
     return res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -5055,7 +5153,7 @@ exports.getSurahMetadata = async (req, res) => {
     console.error('❌ Error fetching surah metadata from MySQL:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -5103,7 +5201,7 @@ exports.getAllPageRanges = async (req, res) => {
     console.error('❌ Error fetching page ranges from MySQL:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
@@ -5144,7 +5242,7 @@ exports.getPageRangeById = async (req, res) => {
     console.error('❌ Error fetching page range by ID from MySQL:', error.message);
     res.status(500).json({
       error: 'Database error',
-      message: error.message
+      message: 'Something went wrong'
     });
   }
 };
