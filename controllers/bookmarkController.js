@@ -162,13 +162,26 @@ const addBookmark = async (req, res) => {
  */
 const deleteBookmark = async (req, res) => {
   const { id } = req.params;
+  // `id` is an AUTO_INCREMENT integer, so deleting by id alone let anyone walk
+  // 1, 2, 3... and wipe every user's bookmarks. Scoping the delete to the owner
+  // means the caller has to know the uid as well, which blocks blind
+  // enumeration. This is not authentication — the uid is still client-supplied;
+  // REQUIRE_USER_AUTH is what makes it trustworthy. See middlewares/requireUser.
+  const userId = req.query.userId || (req.body && req.body.userId);
 
   if (!id) {
     return res.status(400).json({ error: 'Bookmark id is required' });
   }
 
+  if (!userId) {
+    return res.status(400).json({ error: 'userId is required' });
+  }
+
   try {
-    const [result] = await mysqlPool.query('DELETE FROM bookmarks WHERE id = ?', [id]);
+    const [result] = await mysqlPool.query(
+      'DELETE FROM bookmarks WHERE id = ? AND uid = ?',
+      [id, userId],
+    );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Bookmark not found' });

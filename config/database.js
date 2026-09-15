@@ -54,7 +54,12 @@ const connectionConfig = {
 const poolOptions = {
   waitForConnections: true,
   connectionLimit: parseInt(process.env.DB_POOL_MAX) || 10,
-  queueLimit: 0
+  // queueLimit 0 means "queue forever". Under a burst (the per-verse
+  // word-by-word calls are the usual source) every request past the 10
+  // connections piled up holding memory until PM2's max-memory-restart killed
+  // the process. A bounded queue sheds load as a 503 from Express instead,
+  // which the client can retry; a dead process is not recoverable.
+  queueLimit: parseInt(process.env.DB_QUEUE_LIMIT) || 50
 };
 
 // Merge connection and pool configurations
@@ -89,7 +94,13 @@ mysqlPool.getConnection()
     console.error('   2. SSL tunnel is active (for dev: port 3307)');
     console.error('   3. Database credentials are correct');
     console.error('   4. Database exists: ' + poolConfig.database);
-    process.exit(1); // Exit if database connection fails
+    // Deliberately no process.exit here. This is a connectivity probe, not a
+    // config check — a MySQL blip during boot used to exit(1), and once PM2 hit
+    // its restart cap the process stayed stopped and Apache served 503 until
+    // someone noticed. The pool reconnects on its own, so stay up and serve
+    // errors for the queries that fail. Missing credentials still exit above,
+    // because that cannot fix itself.
+    console.error('⚠️  Staying up; the pool will retry on the next query.');
   });
 
 module.exports = mysqlPool;
