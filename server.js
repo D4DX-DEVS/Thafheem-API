@@ -14,7 +14,7 @@ const mysqlPool = require('./config/database');
 const redisClient = require('./config/redis');
 const gracefulShutdown = require('./utils/gracefulShutdown');
 
-const { readLimiter } = require('./middlewares/security');
+const { readLimiter, perWordLimiter } = require('./middlewares/security');
 
 const app = express();
 // Behind Nginx/Netlify/Render — needed so rate limits key on the real client IP.
@@ -187,9 +187,9 @@ app.get('/doc', documentationController.getDocumentation);
 app.get('/doc/quick', documentationController.getQuickReference);
 
 // API Routes - Unified routes with language parameter
-app.use('/api', readLimiter, apiRoutes);
+app.use('/api', readLimiter, perWordLimiter, apiRoutes);
 // Versioned routes (v1) for frontend compatibility
-app.use('/api/v1', readLimiter, apiRoutes);
+app.use('/api/v1', readLimiter, perWordLimiter, apiRoutes);
 
 // 404 handler
 app.use((req, res) => {
