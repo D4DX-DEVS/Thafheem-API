@@ -48,6 +48,11 @@ const allowedOrigins = [
   process.env.FRONTEND_URL
 ].filter(Boolean); // Remove undefined values
 
+// Any localhost / 127.0.0.1 port (Vite picks a free port when 5173 is taken).
+// Same trust level as the hardcoded localhost entries above.
+const LOCAL_ORIGIN_RE = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+const isLocalDevOrigin = (origin) => LOCAL_ORIGIN_RE.test(origin);
+
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, or curl requests)
@@ -58,7 +63,7 @@ app.use(cors({
       return callback(null, true);
     }
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1 || isLocalDevOrigin(origin)) {
       callback(null, true);
     } else {
       console.warn(`⚠️  CORS blocked request from origin: ${origin}`);
