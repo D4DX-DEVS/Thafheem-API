@@ -1,4 +1,27 @@
 const rateLimit = require('express-rate-limit');
+const { ipKeyGenerator } = require('express-rate-limit');
+
+// Rate limits are only as good as the IP they key on.
+//
+// The chain is Cloudflare -> Apache (mod_proxy -> 127.0.0.1:5000) -> Express,
+// but server.js sets `trust proxy` to 1. If Apache appends to X-Forwarded-For
+// (mod_proxy does by default) that is one hop short, and req.ip resolves to the
+// Cloudflare edge instead of the visitor — putting everyone behind one PoP into
+// a single bucket.
+//
+// CF-Connecting-IP is the obvious fix, and Cloudflare overwrites it on every
+// request so it cannot be forged *through* Cloudflare. But anyone who finds the
+// origin IP and connects to it directly can send whatever CF-Connecting-IP they
+// like and mint a fresh bucket per request — a complete bypass. req.ip has no
+// such hole. So this is opt-in, and only safe once the origin refuses
+// connections that do not come from Cloudflare's published ranges.
+//
+// Use GET /api/_debug/ip (needs x-internal-key) to see what the server actually
+// receives before deciding. ipKeyGenerator normalises IPv6 to a /56 so a single
+// client cannot cycle addresses within its own prefix.
+const TRUST_CF_HEADER = process.env.TRUST_CF_CONNECTING_IP === 'true';
+const clientKey = (req) =>
+  ipKeyGenerator((TRUST_CF_HEADER && req.get('cf-connecting-ip')) || req.ip);
 
 // Requests carrying the internal key skip all limits — this is how our own
 // scrapers / migration jobs keep working after limits go on.
@@ -13,6 +36,7 @@ const limiter = (windowMs, max, message) =>
     message: { error: 'Too Many Requests', message },
     standardHeaders: true,
     legacyHeaders: false,
+    keyGenerator: clientKey,
     skip: isTrusted,
   });
 
@@ -31,6 +55,7 @@ const readLimiter = rateLimit({
   message: { error: 'Too Many Requests', message: 'Slow down. Contact us if you need bulk access.' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: clientKey,
   skip: (req) => isTrusted(req) || isPerWordRequest(req),
 });
 
@@ -40,6 +65,7 @@ const perWordLimiter = rateLimit({
   message: { error: 'Too Many Requests', message: 'Slow down. Contact us if you need bulk access.' },
   standardHeaders: true,
   legacyHeaders: false,
+  keyGenerator: clientKey,
   skip: (req) => isTrusted(req) || !isPerWordRequest(req),
 });
 
@@ -56,4 +82,4 @@ const writeLimiter = limiter(
   'Too many writes. Try again later.'
 );
 
-module.exports = { readLimiter, perWordLimiter, searchLimiter, writeLimiter, isTrusted };
+module.exports = { readLimiter, perWordLimiter, searchLimiter, writeLimiter, isTrusted, clientKey };

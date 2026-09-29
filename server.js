@@ -14,7 +14,7 @@ const mysqlPool = require('./config/database');
 const redisClient = require('./config/redis');
 const gracefulShutdown = require('./utils/gracefulShutdown');
 
-const { readLimiter, perWordLimiter } = require('./middlewares/security');
+const { readLimiter, perWordLimiter, isTrusted, clientKey } = require('./middlewares/security');
 
 const app = express();
 // Behind Nginx/Netlify/Render — needed so rate limits key on the real client IP.
@@ -48,6 +48,11 @@ const allowedOrigins = [
   process.env.FRONTEND_URL
 ].filter(Boolean); // Remove undefined values
 
+// Any localhost / 127.0.0.1 port (Vite picks a free port when 5173 is taken).
+// Same trust level as the hardcoded localhost entries above.
+const LOCAL_ORIGIN_RE = /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/;
+const isLocalDevOrigin = (origin) => LOCAL_ORIGIN_RE.test(origin);
+
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps, Postman, or curl requests)
@@ -58,7 +63,7 @@ app.use(cors({
       return callback(null, true);
     }
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.indexOf(origin) !== -1 || isLocalDevOrigin(origin)) {
       callback(null, true);
     } else {
       console.warn(`⚠️  CORS blocked request from origin: ${origin}`);
@@ -186,6 +191,27 @@ app.get('/doc', documentationController.getDocumentation);
 // Quick reference guide (legacy)
 app.get('/doc/quick', documentationController.getQuickReference);
 
+// Shows what the proxy chain actually delivers, so `trust proxy` and the rate
+// limit key can be checked against reality instead of guessed. Gated on the
+// internal key, and mounted before the limiters so a throttled client can still
+// diagnose itself. Returns 404 (not 403) to anyone without the key so it does
+// not advertise that it exists.
+app.get('/api/_debug/ip', (req, res) => {
+  if (!isTrusted(req)) {
+    return res.status(404).json({ error: 'Not Found' });
+  }
+  return res.json({
+    rateLimitKey: clientKey(req),
+    trustProxy: app.get('trust proxy'),
+    reqIp: req.ip,
+    reqIps: req.ips,
+    xForwardedFor: req.get('x-forwarded-for') || null,
+    cfConnectingIp: req.get('cf-connecting-ip') || null,
+    trustCfHeader: process.env.TRUST_CF_CONNECTING_IP === 'true',
+    socketRemoteAddress: req.socket?.remoteAddress || null,
+  });
+});
+
 // API Routes - Unified routes with language parameter
 app.use('/api', readLimiter, perWordLimiter, apiRoutes);
 // Versioned routes (v1) for frontend compatibility
@@ -243,8 +269,10 @@ gracefulShutdown.init({
 process.on('unhandledRejection', (reason, promise) => {
   console.error('❌ Unhandled Promise Rejection:', reason);
   console.error('   Promise:', promise);
-  // Trigger graceful shutdown on critical errors
-  process.exit(1);
+  // No exit. A rejected promise is almost always one request's problem — a
+  // timed-out query, an aborted fetch — and killing the process took the whole
+  // API down with it. uncaughtException below still exits, because there the
+  // process state really may be corrupt.
 });
 
 // Handle uncaught exceptions

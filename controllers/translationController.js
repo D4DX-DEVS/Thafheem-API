@@ -1393,10 +1393,11 @@ exports.getEnglishFinalityOfProphethood = async (req, res) => {
         console.log('[English Finality] Footnotes processed in text');
       }
       
-      // Pattern 2: footnote[1] (standalone) - only if not already inside a processed pattern
+      // Pattern 2: footnote[1] or footnote [1] (standalone) - only if not already inside a processed pattern.
+      // Also catches "(see \nfootnote [5])" once markdown has split "(see" into a separate block.
       // Check if the match is not already inside a sup tag (already processed)
       text = text.replace(
-        /footnote\[(\d+)\]/gi,
+        /footnote\s*\[(\d+)\]/gi,
         (match, id, offset, string) => {
           // Check if this match is already inside a sup tag
           const beforeMatch = string.substring(0, offset);
@@ -1679,6 +1680,8 @@ exports.getMalayalamIntroductionToQuran = async (req, res) => {
         text: renderedText,
         raw_title: sectionTitle || null,
         raw_text: sectionText || '',
+        // Section recitation, stored as a full URL (…/audio/library/qp_N.ogg or .mp3).
+        audio_url: row.audioUrl || row.audiourl || null,
         raw: row
       };
     });
