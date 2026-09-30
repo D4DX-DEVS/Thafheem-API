@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - production
+  # Manual redeploy/restart from the Actions tab (pick the production branch).
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -119,4 +121,28 @@ jobs:
               echo "❌ Deployment failed - app not running"
               pm2 logs thafheem-backend --lines 30 --nostream
               exit 1
+            fi
+
+            # ============================================
+            # 5. Watchdog (restarts the app if the port stops answering)
+            # ============================================
+            echo ""
+            echo "🐕 Installing watchdog cron..."
+            mkdir -p "$APP_DIR/logs"
+            WATCHDOG="/bin/bash $APP_DIR/scripts/watchdog.sh >> $APP_DIR/logs/watchdog.log 2>&1"
+            # Rewriting the crontab from a failed read would wipe other jobs,
+            # so only an empty crontab counts as a safe starting point.
+            CRON_READ_OK=1
+            if ! EXISTING_CRON=$(crontab -l 2>&1); then
+              if echo "$EXISTING_CRON" | grep -qi 'no crontab'; then EXISTING_CRON=""; else CRON_READ_OK=0; fi
+            fi
+            if [ "$CRON_READ_OK" = 1 ]; then
+              CRON_TMP=$(mktemp)
+              { printf '%s\n' "$EXISTING_CRON" | grep -v -e 'scripts/watchdog.sh' -e '^$' || true; } > "$CRON_TMP"
+              echo "*/2 * * * * $WATCHDOG" >> "$CRON_TMP"
+              echo "@reboot sleep 60 && $WATCHDOG" >> "$CRON_TMP"
+              crontab "$CRON_TMP" || echo "⚠️  Could not install watchdog cron (add it via cPanel > Cron Jobs)"
+              rm -f "$CRON_TMP"
+            else
+              echo "⚠️  Could not read crontab; watchdog not installed (add it via cPanel > Cron Jobs)"
             fi
